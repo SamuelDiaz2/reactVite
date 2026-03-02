@@ -1,128 +1,145 @@
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f9;
-  color: #333;
+:root {
+  --primary-color: #6366f1;
+  --secondary-color: #4f46e5;
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --glass: rgba(255, 255, 255, 0.95);
+  --text-main: #1e293b;
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #2563eb;
-}
-
-/* Navegación */
-.nav {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  padding: 20px;
+  background: var(--bg-gradient);
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-.nav button {
-  background: #2563eb;
-  color: white;
+.calendar-card {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 450px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.month-label {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  text-transform: capitalize;
+}
+
+.nav-btn {
+  background: #f1f5f9;
   border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
+  padding: 10px 15px;
+  border-radius: 12px;
   cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
 }
 
-.nav button:hover {
-  background: #1e40af;
-}
+.nav-btn:hover { background: #e2e8f0; transform: translateY(-2px); }
 
-/* Calendario */
-.calendar {
+/* Tabla Estilizada */
+.calendar-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.calendar th {
-  background: #2563eb;
-  color: white;
-  padding: 10px;
+.calendar-table th {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  padding-bottom: 10px;
+  text-transform: uppercase;
 }
 
-.calendar td {
-  height: 80px;
+.calendar-table td {
+  padding: 12px 0;
   text-align: center;
+  border-radius: 14px;
   cursor: pointer;
   transition: 0.2s;
+  position: relative;
+  font-weight: 600;
+  color: #475569;
 }
 
-.calendar td:hover {
-  background: #e0e7ff;
+.calendar-table td:hover:not(:empty) {
+  background: var(--primary-color);
+  color: white;
 }
 
-.note {
-  font-size: 12px;
+.has-note-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 10px;
 }
 
 /* Formulario */
-.form {
-  margin-top: 1.5rem;
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.form-section {
+  margin-top: 20px;
+  border-top: 2px solid #f1f5f9;
+  padding-top: 20px;
 }
 
-.form input {
-  width: 70%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.input-note {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  outline: none;
 }
 
-.form button {
-  margin-left: 5px;
-  background: #2563eb;
+.input-note:focus { border-color: var(--primary-color); }
+
+.btn-save {
+  background: var(--primary-color);
   color: white;
   border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.form button:hover {
-  background: #1e40af;
-}
-
-/* Lista */
-.list {
-  margin-top: 1.5rem;
-  background: white;
-  padding: 1rem;
+  padding: 10px 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  width: 100%;
+  font-weight: 600;
 }
 
-.list li {
+/* Lista de Actividades */
+.activity-list {
+  margin-top: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  background: #f8fafc;
   margin-bottom: 8px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
 }
 
-.list button {
-  margin-left: 10px;
-  background: #dc2626;
-  color: white;
+.btn-delete {
+  background: #fee2e2;
+  color: #ef4444;
   border: none;
-  padding: 4px 10px;
-  border-radius: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
   cursor: pointer;
-}
-
-.list button:hover {
-  background: #991b1b;
 }
