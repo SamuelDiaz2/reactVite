@@ -1,145 +1,99 @@
-:root {
-  --primary-color: #6366f1;
-  --secondary-color: #4f46e5;
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --glass: rgba(255, 255, 255, 0.95);
-  --text-main: #1e293b;
-}
-
-.container {
-  min-height: 100vh;
+/* Estilo general */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7f6;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 20px;
-  background: var(--bg-gradient);
-  font-family: 'Inter', system-ui, sans-serif;
 }
 
-.calendar-card {
-  background: var(--glass);
-  backdrop-filter: blur(10px);
-  padding: 2rem;
-  border-radius: 24px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+.calendar-container {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
 }
 
-.calendar-header {
+h1 { color: #333; text-align: center; }
+
+/* Navegación */
+.nav-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
 }
 
-.month-label {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--text-main);
-  text-transform: capitalize;
-}
-
-.nav-btn {
-  background: #f1f5f9;
+button {
+  padding: 8px 15px;
   border: none;
-  padding: 10px 15px;
-  border-radius: 12px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
   cursor: pointer;
-  transition: all 0.2s;
-  font-weight: bold;
+  transition: 0.3s;
 }
 
-.nav-btn:hover { background: #e2e8f0; transform: translateY(-2px); }
+button:hover { background-color: #0056b3; }
 
-/* Tabla Estilizada */
-.calendar-table {
+/* Tabla */
+table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-.calendar-table th {
-  color: #94a3b8;
-  font-size: 0.8rem;
-  padding-bottom: 10px;
-  text-transform: uppercase;
-}
+th { background: #f8f9fa; color: #666; padding: 10px; }
 
-.calendar-table td {
-  padding: 12px 0;
+td {
+  height: 60px;
   text-align: center;
-  border-radius: 14px;
-  cursor: pointer;
+  vertical-align: middle;
+  border: 1px solid #eee;
   transition: 0.2s;
-  position: relative;
-  font-weight: 600;
-  color: #475569;
 }
 
-.calendar-table td:hover:not(:empty) {
-  background: var(--primary-color);
-  color: white;
+td:hover { background-color: #f0f7ff; }
+
+/* El día seleccionado */
+.selected-day {
+  background-color: #e7f3ff !important;
+  font-weight: bold;
+  border: 2px solid #007bff;
 }
 
-.has-note-dot {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  font-size: 10px;
+/* Formulario de notas */
+.note-form {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
 }
 
-/* Formulario */
-.form-section {
-  margin-top: 20px;
-  border-top: 2px solid #f1f5f9;
-  padding-top: 20px;
+input[type="text"] {
+  width: 70%;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-.input-note {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  outline: none;
+/* Lista de actividades */
+.activities-list {
+  list-style: none;
+  padding: 0;
 }
 
-.input-note:focus { border-color: var(--primary-color); }
-
-.btn-save {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: 600;
-}
-
-/* Lista de Actividades */
-.activity-list {
-  margin-top: 20px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.activity-item {
-  background: #f8fafc;
+.activities-list li {
+  background: #fff;
+  border-left: 4px solid #007bff;
   margin-bottom: 8px;
-  padding: 10px 15px;
-  border-radius: 10px;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.btn-delete {
-  background: #fee2e2;
-  color: #ef4444;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+.btn-delete { background-color: #ff4d4d; padding: 4px 8px; font-size: 12px; }
