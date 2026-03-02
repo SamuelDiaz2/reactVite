@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import { Motion } from '@capacitor/motion';
 
 const App = () => {
   const [options, setOptions] = useState([]);
   const [currentInput, setCurrentInput] = useState("");
   const [winner, setWinner] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  
+  // Usamos una referencia para que el sensor siempre tenga la versión actualizada de pickWinner
+  const isSpinningRef = useRef(isSpinning);
+  const optionsRef = useRef(options);
+
+  useEffect(() => {
+    isSpinningRef.current = isSpinning;
+    optionsRef.current = options;
+  }, [isSpinning, options]);
 
   const addOption = () => {
     if (currentInput.trim() !== "") {
@@ -16,18 +26,50 @@ const App = () => {
   };
 
   const pickWinner = () => {
-    if (options.length < 2) return alert("¡Añade al menos 2 opciones!");
-    
+    if (optionsRef.current.length < 2) return; 
+    if (isSpinningRef.current) return;
+
     setIsSpinning(true);
     setWinner(null);
 
-    // Simulamos que la app está "pensando" para darle emoción
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * options.length);
-      setWinner(options[randomIndex]);
+      const randomIndex = Math.floor(Math.random() * optionsRef.current.length);
+      setWinner(optionsRef.current[randomIndex]);
       setIsSpinning(false);
     }, 1500); 
   };
+
+  // --- Lógica del Sensor ---
+  useEffect(() => {
+    let accelListener;
+
+    const startMotion = async () => {
+      try {
+        // En iOS, esto podría requerir una interacción previa del usuario
+        accelListener = await Motion.addListener('accel', (event) => {
+          const { x, y, z } = event.acceleration;
+          const sensitivity = 15; // Ajusta este número: más bajo = más sensible
+
+          if (
+            Math.abs(x) > sensitivity || 
+            Math.abs(y) > sensitivity || 
+            Math.abs(z) > sensitivity
+          ) {
+            pickWinner();
+          }
+        });
+      } catch (e) {
+        console.error("El sensor no está disponible en este dispositivo", e);
+      }
+    };
+
+    startMotion();
+
+    // Limpieza al desmontar el componente
+    return () => {
+      if (accelListener) accelListener.remove();
+    };
+  }, []); 
 
   const reset = () => {
     setOptions([]);
@@ -37,6 +79,7 @@ const App = () => {
   return (
     <div className="app-container">
       <h1>¿Qué elijo? 🤔</h1>
+      <p style={{fontSize: '0.8rem', opacity: 0.6}}>Añade opciones y sacude el celular</p>
       
       <div className="input-group">
         <input 
