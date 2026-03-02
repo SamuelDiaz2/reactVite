@@ -1,105 +1,78 @@
 import React, { useState } from 'react';
+import './app.css';
 
 const App = () => {
-  const [viewDate, setViewDate] = useState(new Date());
-  const [notes, setNotes] = useState({}); 
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const [currentInput, setCurrentInput] = useState("");
+  const [winner, setWinner] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
 
-  const year = viewDate.getFullYear();
-  const month = viewDate.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay();
+  const addOption = () => {
+    if (currentInput.trim() !== "") {
+      setOptions([...options, currentInput]);
+      setCurrentInput("");
+      setWinner(null);
+    }
+  };
 
-  const dateKey = (day) => `${year}-${month}-${day}`;
+  const pickWinner = () => {
+    if (options.length < 2) return alert("¡Añade al menos 2 opciones!");
+    
+    setIsSpinning(true);
+    setWinner(null);
 
-  const handleSaveNote = () => {
-    setNotes({ ...notes, [dateKey(selectedDay)]: inputValue });
-    setInputValue("");
-    setSelectedDay(null);
+    // Simulamos que la app está "pensando" para darle emoción
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * options.length);
+      setWinner(options[randomIndex]);
+      setIsSpinning(false);
+    }, 1500); 
+  };
+
+  const reset = () => {
+    setOptions([]);
+    setWinner(null);
   };
 
   return (
-    <div>
-      <h1>Calendario de Notas</h1>
-
-      {/* Navegación de Meses */}
-      <div>
-        <button onClick={() => setViewDate(new Date(year, month - 1))}>Anterior</button>
-        <span> {viewDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' })} </span>
-        <button onClick={() => setViewDate(new Date(year, month + 1))}>Siguiente</button>
+    <div className="app-container">
+      <h1>¿Qué elijo? 🤔</h1>
+      
+      <div className="input-group">
+        <input 
+          value={currentInput}
+          onChange={(e) => setCurrentInput(e.target.value)}
+          placeholder="Escribe una opción..."
+          onKeyPress={(e) => e.key === 'Enter' && addOption()}
+        />
+        <button onClick={addOption} className="btn-add">+</button>
       </div>
 
-      <br />
+      <div className="options-list">
+        {options.map((opt, index) => (
+          <span key={index} className="option-tag">{opt}</span>
+        ))}
+      </div>
 
-      {/* Tabla del Calendario */}
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Do</th><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sa</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Generamos las filas del calendario */}
-          {(() => {
-            let rows = [];
-            let cells = [];
-            
-            // Espacios vacíos iniciales
-            for (let i = 0; i < firstDay; i++) {
-              cells.push(<td key={`e-${i}`}></td>);
-            }
-
-            // Días del mes
-            for (let day = 1; day <= daysInMonth; day++) {
-              const key = dateKey(day);
-              cells.push(
-                <td key={day} onClick={() => setSelectedDay(day)} style={{ cursor: 'pointer' }}>
-                  {day} {notes[key] && "📌"}
-                </td>
-              );
-              
-              if (cells.length === 7) {
-                rows.push(<tr key={day}>{cells}</tr>);
-                cells = [];
-              }
-            }
-            
-            // Última fila
-            if (cells.length > 0) rows.push(<tr key="last">{cells}</tr>);
-            return rows;
-          })()}
-        </tbody>
-      </table>
-
-      {/* Formulario para agregar nota */}
-      {selectedDay && (
-        <div>
-          <h3>Nueva actividad para el día {selectedDay}</h3>
-          <input 
-            type="text" 
-            value={inputValue} 
-            onChange={(e) => setInputValue(e.target.value)} 
-            placeholder="Ej: Ir al gimnasio"
-          />
-          <button onClick={handleSaveNote}>Guardar Nota</button>
-          <button onClick={() => setSelectedDay(null)}>Cancelar</button>
+      {options.length > 0 && (
+        <div className="actions">
+          <button 
+            onClick={pickWinner} 
+            className={`btn-decide ${isSpinning ? 'spinning' : ''}`}
+            disabled={isSpinning}
+          >
+            {isSpinning ? "Decidiendo..." : "¡TOMAR DECISIÓN!"}
+          </button>
+          <button onClick={reset} className="btn-reset">Borrar todo</button>
         </div>
       )}
 
-      {/* Resumen de actividades */}
-      <hr />
-      <h3>Mis Actividades:</h3>
-      <ul>
-        {Object.entries(notes).map(([key, text]) => (
-          <li key={key}>
-            <strong>Fecha {key}:</strong> {text} 
-            <button onClick={() => {
-              const n = {...notes}; delete n[key]; setNotes(n);
-            }}> Eliminar</button>
-          </li>
-        ))}
-      </ul>
+      {winner && (
+        <div className="winner-announcement">
+          <h2>La suerte dice:</h2>
+          <div className="winner-card">{winner}</div>
+        </div>
+      )}
     </div>
   );
 };
